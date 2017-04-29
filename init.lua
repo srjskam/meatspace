@@ -27,7 +27,59 @@ end)
 
 local modpath = minetest.get_modpath(minetest.get_current_modname())
 
-dofile(modpath.."/mapgen.lua")
 dofile(modpath.."/nodes.lua")
+dofile(modpath.."/mapgen.lua")
+
+mobs:register_mob("meatspace:leucocyte", {
+	type = "monster",
+	collisionbox = {-0.3, -0.3, -0.3, 0.3, 0.3, 0.3},
+	hp_max = 12,
+	hp_min = 7,
+	visual = "mesh",
+	mesh = "leucocyte.x",
+	textures = {{"leucocyte.png","leucocyte.png", "meat.png^[colorize:#D4D:100"}},
+	fly = true,
+	fly_in = "meatspace:blood",
+	visual_size = {x=2, y=2},
+	makes_footstep_sound = false,
+	view_range = 13,
+	walk_velocity = 1,
+	reach =1.5,
+	run_velocity = 2,
+	damage = 2,
+	jump = false,
+	armor = 100,
+	drawtype = "front",
+	water_damage = 0,
+	fear_height = 5,
+	floats = 0,
+	lava_damage = 5,
+	light_damage = 0,
+	group_attack=true,
+	attack_animals=true,
+	knock_back=5,
+	blood_texture="meat.png",
+	on_rightclick = nil,
+	attack_type = "dogfight",
+	animation = {
+		speed_normal = 15,
+		speed_run = 25,
+		stand_start = 1,
+		stand_end = 100,
+		walk_start = 1,
+		walk_end = 100,
+		run_start = 1,
+		run_end = 100,
+		punch_start = 1,
+		punch_end = 100,
+	}
+	--pathfinding = 1,
+})
+mobs:spawn({
+	name = "meatspace:leucocyte",
+	nodes = {"meatspace:blood"},
+	interval = 1,
+	chance = 2,
+})
 
 print("[meatspace] done")

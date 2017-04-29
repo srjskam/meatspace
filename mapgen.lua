@@ -121,6 +121,25 @@ minetest.register_ore({
 	},
 })
 
+--fat
+minetest.register_ore({ 
+	ore_type         = "blob",
+	ore              = "meatspace:fat",
+	wherein          = "meatspace:meat",
+	clust_scarcity   = 33^3,
+	clust_size       = 22,
+	y_min            = 0,
+	y_max            = 100,
+	noise_threshold = 0.5,
+	noise_params     = {
+		offset=0,
+		scale=1,
+		spread={x=99, y=33, z=99},
+		seed=12394,
+		octaves=5,
+		persist=0.8
+	},
+})
 
 --nerves
 minetest.register_ore({
@@ -170,7 +189,8 @@ minetest.register_ore({
 	y_max          = 3100,
 })
 
--- grow hair
+-- grow hair -not
+if false then
 minetest.register_abm{
     label = "grow hair",
 	nodenames = {"meatspace:hair"},
@@ -181,17 +201,7 @@ minetest.register_abm{
 		minetest.set_node({x = pos.x, y = pos.y + 1, z = pos.z}, {name = "meatspace:hair"})
 	end,
 }
-
-minetest.register_decoration({
-	deco_type = "schematic",
-	place_on = "meatspace:mucous_membrane",
-	--sidelen = 16,
-	fill_ratio = 0.001,
-	biomes = {"mouth"},
-	schematic = "tooth.mts",
- 	rotation = "random",
-	flags = {place_center_x = true, place_center_y = true, place_center_z = true},
-})
+end
 
 minetest.register_decoration({
 	deco_type = "simple",
@@ -202,7 +212,49 @@ minetest.register_decoration({
 	biomes = {"mouth"},
 })
 
---------------------------------------------------------------- 
+minetest.register_decoration({
+	deco_type = "simple",
+	decoration = "meatspace:filiform_papilla",
+	place_on = "meatspace:mucous_membrane",
+	fill_ratio = 0.1,
+	biomes = {"mouth"},
+})
+minetest.register_decoration({
+	deco_type = "simple",
+	decoration = "meatspace:fungiform_papilla",
+	place_on = "meatspace:mucous_membrane",
+	fill_ratio = 0.05,
+	biomes = {"mouth"},
+})
+--------------------------------------------------------------- trees
+
+
+local treedef_hair = {
+	trunk_type = "single",
+
+	iterations = 8,
+	trunk = "meatspace:hair",
+	random_level = 1,
+	angle = 30,
+	
+	axiom = "A",
+	rules_a = "TTTTdcdc+a",
+	rules_b = "",
+	rules_c = "******d",
+	rules_d = "**c",
+	
+	fruit = "",
+	thin_branches = true,
+	leaves2_chance = "",
+	leaves2 = "",
+	leaves = "meatspace:hair",
+	fruit_chance = 0,
+	name = "hair",
+}                        
+biome_lib:register_generate_plant({surface="meatspace:skin", rarity=1, max_count = 20}, treedef_hair)
+
+
+--------------------------------------------------------------- register_on_generated
 --thanks, caverealms
 
 local perlin_bone = {
@@ -238,6 +290,10 @@ local bilenoise ={
 		octaves=2,
 		persist=0.8
 	}
+	
+function randomFloat(lower, greater)
+    return lower + math.random()  * (greater - lower);
+end
 minetest.register_on_generated(function(minp, maxp, seed)
 
 	local x1 = maxp.x
@@ -307,11 +363,14 @@ minetest.register_on_generated(function(minp, maxp, seed)
 				if data[vi] == cid_tooth_seed then
 					local height = math.random(15, 80)					
 					local radius = math.floor(math.random(0.05*height, 0.25*height))
-					local depth = math.floor(math.random(0.1*height, 0.8*height))--into ground				
+					local depth = math.floor(math.random(0.33*height, 0.8*height))--into ground		
+					local squarity = randomFloat(2,3) --2=round
 
 					for xx = x-radius, x+radius do
 						for zz = z-radius, z+radius do
-							local distance = math.sqrt((x-xx)^2+(z-zz)^2)
+							local distance = math.pow( math.pow(math.abs(x-xx), squarity)
+													 + math.pow(math.abs(z-zz), squarity), 1/squarity)
+							--local distance = math.sqrt((x-xx)^2+(z-zz)^2)
 							for yy = y-depth, y-depth + height  do
 								local bulge = -(((yy-y+depth)/height*0.75)*2-1)^2+1
 								if  distance < bulge*radius*0.66 then

@@ -93,6 +93,30 @@ minetest.register_node("meatspace:hair", {
 	on_place = minetest.rotate_node
 })
 
+minetest.register_node("meatspace:filiform_papilla", {
+	description = "Filiform papilla",
+	drawtype = "plantlike",
+	waving = 1,
+	tiles = {"filiform_papilla.png"},
+	paramtype = "light",
+	sunlight_propagates = true,
+	walkable = false,
+	buildable_to = true,
+	groups = {snappy=3,flammable=3,flora=1,attached_node=1},
+})
+minetest.register_node("meatspace:fungiform_papilla", {
+	description = "Fungiform papilla",
+	drawtype = "plantlike",
+	waving = 1,
+	tiles = {"fungiform_papilla.png"},
+	paramtype = "light",
+	sunlight_propagates = true,
+	walkable = false,
+	buildable_to = true,
+	groups = {snappy=3,flammable=3,flora=1,attached_node=1},
+})
+
+
 --------------------liquids
 
 minetest.register_node("meatspace:liquid", {
