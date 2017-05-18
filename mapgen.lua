@@ -250,9 +250,32 @@ local treedef_hair = {
 	leaves = "meatspace:hair",
 	fruit_chance = 0,
 	name = "hair",
-}                        
-biome_lib:register_generate_plant({surface="meatspace:skin", rarity=90, max_count = 20}, treedef_hair)
+}       
 
+local treedef_nail = {
+    name = "nail", 
+    trunk_type = "single", 
+    thin_branches = true, 
+    angle = 45, 
+    iterations = 7, 
+    random_level = 1, 
+    trunk = "meatspace:nail", 
+    leaves = "meatspace:nail", 
+    axiom = "[&&a][****&&a]Dddddddddddd", 
+    rules_a = "f[^^Dddddddddddd]f[^^Dddddddddddd]bcbca", 
+    rules_b = "+", 
+    rules_c = "-", 
+    rules_d = "T",
+
+    fruit_chance = 0, 
+    fruit = "", 
+    leaves2_chance = "", 
+    leaves2 = "", 
+}
+   
+                 
+biome_lib:register_generate_plant({surface="meatspace:skin", rarity=90, max_count = 20}, treedef_hair)
+biome_lib:register_generate_plant({surface="meatspace:skin", rarity=93, max_count = 10}, treedef_nail)
 
 --------------------------------------------------------------- register_on_generated
 --thanks, caverealms

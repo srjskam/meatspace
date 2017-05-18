@@ -24,6 +24,13 @@ minetest.register_node("meatspace:skin", {
 	groups = {cracky = 2,oddly_breakable_by_hand=1},
 })
 
+minetest.register_node("meatspace:nail", {
+	description = "Nail (keratin)",
+	node_box={type = "regular"},
+	tiles = {"nail.png"},
+	is_ground_content = true,
+	groups = {cracky = 2,oddly_breakable_by_hand=1},
+})
 
 minetest.register_node("meatspace:fat", {
 	description = "Fat",
