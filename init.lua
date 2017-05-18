@@ -25,10 +25,22 @@ end)
 
 
 
+local worldpath=minetest.get_worldpath()
 local modpath = minetest.get_modpath(minetest.get_current_modname())
 
+dofile(modpath.."/default_settings.txt")
+
+if io.open(worldpath.."/meatspace_settings.txt","r") then
+	io.close()
+	dofile(worldpath.."/meatspace_settings.txt")
+end
+
+
+
 dofile(modpath.."/nodes.lua")
-dofile(modpath.."/mapgen.lua")
+if override_mapgen then
+	dofile(modpath.."/mapgen.lua")
+end
 
 mobs:register_mob("meatspace:leucocyte", {
 	type = "monster",

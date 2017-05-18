@@ -234,11 +234,11 @@ local treedef_hair = {
 
 	iterations = 8,
 	trunk = "meatspace:hair",
-	random_level = 1,
+	random_level = 4,
 	angle = 30,
 	
 	axiom = "A",
-	rules_a = "TTTTdcdc+a",
+	rules_a = "TTTTTTTdc+a",
 	rules_b = "",
 	rules_c = "******d",
 	rules_d = "**c",
@@ -251,7 +251,7 @@ local treedef_hair = {
 	fruit_chance = 0,
 	name = "hair",
 }                        
-biome_lib:register_generate_plant({surface="meatspace:skin", rarity=1, max_count = 20}, treedef_hair)
+biome_lib:register_generate_plant({surface="meatspace:skin", rarity=90, max_count = 20}, treedef_hair)
 
 
 --------------------------------------------------------------- register_on_generated
