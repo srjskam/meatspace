@@ -28,17 +28,10 @@ end)
 local worldpath=minetest.get_worldpath()
 local modpath = minetest.get_modpath(minetest.get_current_modname())
 
-dofile(modpath.."/default_settings.txt")
-
-if io.open(worldpath.."/meatspace_settings.txt","r") then
-	io.close()
-	dofile(worldpath.."/meatspace_settings.txt")
-end
-
-
-
 dofile(modpath.."/nodes.lua")
-if override_mapgen then
+
+if minetest.setting_getbool("meatspace_override_mapgen") then
+    print("[meatspace] mapgen enabled")
 	dofile(modpath.."/mapgen.lua")
 end
 
