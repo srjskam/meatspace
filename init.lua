@@ -29,6 +29,7 @@ local worldpath=minetest.get_worldpath()
 local modpath = minetest.get_modpath(minetest.get_current_modname())
 
 dofile(modpath.."/nodes.lua")
+dofile(modpath.."/crafting.lua")
 
 if minetest.setting_getbool("meatspace_override_mapgen") then
     print("[meatspace] mapgen enabled")

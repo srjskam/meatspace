@@ -1,11 +1,13 @@
 
 
+-- oddly_breakable_by_hand=, crumbly=, cracky=, choppy=, fleshy=, snappy=, explody=,
+
 minetest.register_node("meatspace:tooth_seed", {
 	description = "tooth_seed",
 	node_box={type = "regular"},
 	tiles = {"bubble.png"},
 	is_ground_content = true,
-	groups = {cracky = 2,oddly_breakable_by_hand=1},
+	groups = {oddly_breakable_by_hand=3},
 })
 
 minetest.register_node("meatspace:meat", {
@@ -13,23 +15,7 @@ minetest.register_node("meatspace:meat", {
 	node_box={type = "regular"},
 	tiles = {"meat.png"},
 	is_ground_content = true,
-	groups = {cracky = 2,oddly_breakable_by_hand=1},
-})
-
-minetest.register_node("meatspace:skin", {
-	description = "Skin",
-	node_box={type = "regular"},
-	tiles = {"skin.png"},
-	is_ground_content = true,
-	groups = {cracky = 2,oddly_breakable_by_hand=1},
-})
-
-minetest.register_node("meatspace:nail", {
-	description = "Nail (keratin)",
-	node_box={type = "regular"},
-	tiles = {"nail.png"},
-	is_ground_content = true,
-	groups = {cracky = 2,oddly_breakable_by_hand=1},
+	groups = {oddly_breakable_by_hand=2, fleshy=3, choppy=3},
 })
 
 minetest.register_node("meatspace:fat", {
@@ -37,57 +23,15 @@ minetest.register_node("meatspace:fat", {
 	node_box={type = "regular"},
 	tiles = {"fat.png"},
 	is_ground_content = true,
-	groups = {cracky = 2,oddly_breakable_by_hand=1},
+	groups = {oddly_breakable_by_hand=2, fleshy=3, choppy=3},
 })
 
-minetest.register_node("meatspace:mucous_membrane", {
-	description = "Mucous Membrane",
+minetest.register_node("meatspace:skin", {
+	description = "Skin",
 	node_box={type = "regular"},
-	tiles = {"mucous_membrane.png"},
+	tiles = {"skin.png"},
 	is_ground_content = true,
-	groups = {cracky = 2,oddly_breakable_by_hand=1},
-})
-
-minetest.register_node("meatspace:bone", {
-	description = "Bone",
-	node_box={type = "regular"},
-	tiles = {"bone.png"},
-	is_ground_content = true,
-	groups = {cracky = 2,oddly_breakable_by_hand=1},
-})
-
-minetest.register_node("meatspace:bone_matrix", {
-	description = "Bone matrix",
-	node_box={type = "regular"},
-	tiles = {"bone_matrix.png"},
-	is_ground_content = true,
-	groups = {cracky = 2,oddly_breakable_by_hand=1},
-})
-
-minetest.register_node("meatspace:enamel", {
-	description = "Enamel",
-	node_box={type = "regular"},
-	tiles = {"enamel.png"},
-	is_ground_content = true,
-	groups = {cracky = 2,oddly_breakable_by_hand=1},
-})
-
-minetest.register_node("meatspace:liver", {
-	description = "Liver",
-	node_box={type = "regular"},
-	tiles = {"liver.png"},
-	is_ground_content = true,
-	groups = {cracky = 2,oddly_breakable_by_hand=1},
-})
-
-minetest.register_node("meatspace:nerve", {
-	description = "Nerve",
-	tiles = {"nerve_top.png", "nerve_top.png", "nerve.png"},
-	paramtype2 = "facedir",
-	is_ground_content = false,
-	groups = {tree = 1, choppy = 2, oddly_breakable_by_hand = 1, flammable = 2},
-	--sounds = default.node_sound_wood_defaults(),
-	on_place = minetest.rotate_node
+	groups = {oddly_breakable_by_hand=1, fleshy=2, choppy=2},
 })
 
 minetest.register_node("meatspace:hair", {
@@ -95,10 +39,71 @@ minetest.register_node("meatspace:hair", {
 	tiles = {"hair_top.png", "hair_top.png", "hair.png"},
 	paramtype2 = "facedir",
 	is_ground_content = false,
-	groups = {tree = 1, choppy = 2, oddly_breakable_by_hand = 1, flammable = 2},
+	groups = {oddly_breakable_by_hand=1, choppy=3, fleshy=2, snappy=3},
 	--sounds = default.node_sound_wood_defaults(),
 	on_place = minetest.rotate_node
 })
+
+minetest.register_node("meatspace:nail", {
+	description = "Nail (keratin)",
+	node_box={type = "regular"},
+	tiles = {"nail.png"},
+	is_ground_content = false,
+	groups = {oddly_breakable_by_hand=1, choppy=3, fleshy=1},
+})
+
+minetest.register_node("meatspace:mucous_membrane", {
+	description = "Mucous Membrane",
+	node_box={type = "regular"},
+	tiles = {"mucous_membrane.png"},
+	is_ground_content = true,
+	groups = {oddly_breakable_by_hand=2, fleshy=3, choppy=2},
+})
+
+
+minetest.register_node("meatspace:bone", {
+	description = "Bone",
+	node_box={type = "regular"},
+	tiles = {"bone.png"},
+	is_ground_content = true,
+	groups = {cracky = 2},
+})
+
+minetest.register_node("meatspace:bone_matrix", {
+	description = "Bone matrix",
+	node_box={type = "regular"},
+	tiles = {"bone_matrix.png"},
+	is_ground_content = true,
+	groups = {cracky = 3},
+})
+
+minetest.register_node("meatspace:enamel", {
+	description = "Enamel",
+	node_box={type = "regular"},
+	tiles = {"enamel.png"},
+	is_ground_content = true,
+	groups = {cracky = 1},
+})
+
+minetest.register_node("meatspace:liver", {
+	description = "Liver",
+	node_box={type = "regular"},
+	tiles = {"liver.png"},
+	is_ground_content = true,
+	groups = {oddly_breakable_by_hand=2, fleshy=3, choppy=3},
+})
+
+minetest.register_node("meatspace:nerve", {
+	description = "Nerve",
+	tiles = {"nerve_top.png", "nerve_top.png", "nerve.png"},
+	paramtype2 = "facedir",
+	is_ground_content = false,
+	groups = {oddly_breakable_by_hand=2, fleshy=2, choppy=3},
+	--sounds = default.node_sound_wood_defaults(),
+	on_place = minetest.rotate_node
+})
+
+-- oddly_breakable_by_hand=, crumbly=, cracky=, choppy=, fleshy=, snappy=, explody=,
 
 minetest.register_node("meatspace:filiform_papilla", {
 	description = "Filiform papilla",
@@ -109,7 +114,7 @@ minetest.register_node("meatspace:filiform_papilla", {
 	sunlight_propagates = true,
 	walkable = false,
 	buildable_to = true,
-	groups = {snappy=3,flammable=3,flora=1,attached_node=1},
+	groups = {oddly_breakable_by_hand=3, choppy=3, fleshy=3, snappy=3},
 })
 minetest.register_node("meatspace:fungiform_papilla", {
 	description = "Fungiform papilla",
@@ -120,7 +125,7 @@ minetest.register_node("meatspace:fungiform_papilla", {
 	sunlight_propagates = true,
 	walkable = false,
 	buildable_to = true,
-	groups = {snappy=3,flammable=3,flora=1,attached_node=1},
+	groups = {oddly_breakable_by_hand=3, choppy=3, fleshy=3, snappy=3},
 })
 
 
