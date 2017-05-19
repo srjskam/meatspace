@@ -1,0 +1,2 @@
+meatspace_override_mapgen (Enable custom mapgen) bool false
+
