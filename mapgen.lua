@@ -317,8 +317,59 @@ local bilenoise ={
 function randomFloat(lower, greater)
     return lower + math.random()  * (greater - lower);
 end
-minetest.register_on_generated(function(minp, maxp, seed)
 
+
+
+function drawBall( x, y, z, cid, radius)
+    local radiussquared = math.pow(radius, 2)
+	for xx = x-radius, x+radius do
+		for zz = z-radius, z+radius do
+			for yy = y-radius, y+radius  do
+			    if ( math.pow(math.abs(x-xx), 2)
+			       + math.pow(math.abs(y-yy), 2)
+				   + math.pow(math.abs(z-zz), 2)) < radiussquared then
+			        setXYZ( xx, yy, zz, cid)
+			    end
+			end
+		end
+	end
+end --drawBall
+
+function drawMultiline(origin, vertices, drawfunction)
+	from = origin
+    for i, dest in ipairs(vertices) do
+        drawLine(from,dest , drawfunction)	
+        from = dest
+    end
+end--drawMultiline
+
+function createMultiline(position, minvertices, maxvertices, initspeed, maxspeed, maxdelta)
+    minvertices=minvertices or 4
+    maxvertices=maxvertices or 8
+    initspeed=initspeed or 4
+    maxspeed=maxspeed or 10
+    maxdelta=maxdelta or 2
+    vertices = {}
+    speedvec = { x=randomFloat(-initspeed,initspeed)
+               , y=randomFloat(-initspeed,initspeed)
+               , z=randomFloat(-initspeed,initspeed)}
+    
+    for i = 1, math.random(minvertices,maxvertices) do 
+        deltavec = { x=randomFloat(-maxdelta,maxdelta)
+                    , y=randomFloat(-maxdelta,maxdelta)
+                    , z=randomFloat(-maxdelta,maxdelta)}
+        position = vector.add(position, speedvec)
+        speedvec = vector.add(speedvec, deltavec)
+        speedvec = {x=math.min(maxspeed, math.max(-maxspeed, speedvec.x))
+                   ,y=math.min(maxspeed, math.max(-maxspeed, speedvec.y))
+                   ,z=math.min(maxspeed, math.max(-maxspeed, speedvec.z))
+                   }
+        table.insert(vertices, position)
+    end
+    return vertices
+end--createMultiline
+				    
+minetest.register_on_generated(function(minp, maxp, seed)
 	local x1 = maxp.x
 	local y1 = maxp.y
 	local z1 = maxp.z
@@ -329,6 +380,10 @@ minetest.register_on_generated(function(minp, maxp, seed)
 	local vm, emin, emax = minetest.get_mapgen_object("voxelmanip")
 	local area = VoxelArea:new{MinEdge=emin, MaxEdge=emax}
 	local data = vm:get_data()
+	
+	function setXYZ( x, y, z, cid)
+	    data[area:index(x,y,z)] = cid
+    end --setXYZ
 
 	local cid_air = minetest.get_content_id("air")	
 	local cid_meat = minetest.get_content_id("meatspace:meat")	
@@ -351,6 +406,7 @@ minetest.register_on_generated(function(minp, maxp, seed)
 	local nvals_perlin_enamel = minetest.get_perlin_map(perlin_enamel, chulens):get3dMap_flat(minposxyz)
 	local nvals_urinenoise = minetest.get_perlin_map(urinenoise, chulens):get3dMap_flat(minposxyz)
 	local nvals_bilenoise = minetest.get_perlin_map(bilenoise, chulens):get3dMap_flat(minposxyz)
+
 
 
 	local nixyz = 1 --3D node index
@@ -410,7 +466,35 @@ minetest.register_on_generated(function(minp, maxp, seed)
 						end--zz
 					end--xx
 				end--every tooth seed
+				
+				
+				
 
+				if false and x%80 == 0 and y%80 == 0 and z%80 ==0 then
+				    local here = {x=x, y=y, z=z}
+				    local there = {x=x+math.random(-4, 4), y=y+math.random(-4, 4), z=z+math.random(-4, 4)}
+				    --drawLine(here, there, function (x,y,z) setXYZ(x,y,z, cid_enamel) end)
+				    drawLine(here, there, function (x,y,z) drawBall(x,y,z,cid_enamel,3) end)
+				end
+				
+				-- guts
+				if data[vi] == cid_meat and math.random(0,50^3) == 0 then
+				    verts =  createMultiline({x=x, y=y, z=z}
+				                            , 5--minvertices, 
+				                            , 12--maxvertices
+				                            )--, initspeed, maxspeed, maxdelta)
+				    
+				    drawMultiline( {x=x, y=y, z=z}
+				                 , verts
+				                 , function (x,y,z) drawBall(x,y,z,cid_mucous_membrane,4) end
+				                 )
+				    drawMultiline( {x=x, y=y, z=z}
+				                 , verts
+				                 , function (x,y,z) drawBall(x,y,z,cid_bile,3) end
+				                 )
+
+		
+				end
 				--increment indices
 				nixyz = nixyz + 1
 				vi = vi + 1
