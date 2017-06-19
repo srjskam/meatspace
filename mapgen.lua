@@ -318,7 +318,7 @@ function randomFloat(lower, greater)
     return lower + math.random()  * (greater - lower);
 end
 
-
+---------------------------------------------------------------  functions
 
 function drawBall( x, y, z, cid, radius)
     local radiussquared = math.pow(radius, 2)
@@ -335,13 +335,6 @@ function drawBall( x, y, z, cid, radius)
 	end
 end --drawBall
 
-function drawMultiline(origin, vertices, drawfunction)
-	from = origin
-    for i, dest in ipairs(vertices) do
-        drawLine(from,dest , drawfunction)	
-        from = dest
-    end
-end--drawMultiline
 
 function createMultiline(position, minvertices, maxvertices, initspeed, maxspeed, maxdelta)
     minvertices=minvertices or 4
@@ -368,7 +361,33 @@ function createMultiline(position, minvertices, maxvertices, initspeed, maxspeed
     end
     return vertices
 end--createMultiline
-				    
+
+function drawMultiline(origin, vertices, drawfunction)
+	from = origin
+    for i, dest in ipairs(vertices) do
+        drawLine(from,dest , drawfunction)	
+        from = dest
+    end
+end--drawMultiline
+
+function vertexCloud(minver, maxver, number)
+    n = number or 10
+	verts = {}
+	for i= 1, n do 
+	    table.insert(verts, {x=math.random(minver.x, maxver.x)
+	                        ,y=math.random(minver.y, maxver.y)
+	                        ,z=math.random(minver.z, maxver.z)
+	                        }	)
+	end
+	return verts
+end		--vertexCloud
+
+function drawRays(from, toverts, drawfunction)
+    for i,to in ipairs(toverts) do
+        drawLine(from, to, drawfunction)
+    end
+end --drawRays
+	    
 minetest.register_on_generated(function(minp, maxp, seed)
 	local x1 = maxp.x
 	local y1 = maxp.y
@@ -466,17 +485,7 @@ minetest.register_on_generated(function(minp, maxp, seed)
 						end--zz
 					end--xx
 				end--every tooth seed
-				
-				
-				
-
-				if false and x%80 == 0 and y%80 == 0 and z%80 ==0 then
-				    local here = {x=x, y=y, z=z}
-				    local there = {x=x+math.random(-4, 4), y=y+math.random(-4, 4), z=z+math.random(-4, 4)}
-				    --drawLine(here, there, function (x,y,z) setXYZ(x,y,z, cid_enamel) end)
-				    drawLine(here, there, function (x,y,z) drawBall(x,y,z,cid_enamel,3) end)
-				end
-				
+								
 				-- guts
 				if data[vi] == cid_meat and math.random(0,50^3) == 0 then
 				    verts =  createMultiline({x=x, y=y, z=z}
@@ -484,17 +493,18 @@ minetest.register_on_generated(function(minp, maxp, seed)
 				                            , 12--maxvertices
 				                            )--, initspeed, maxspeed, maxdelta)
 				    
-				    drawMultiline( {x=x, y=y, z=z}
-				                 , verts
-				                 , function (x,y,z) drawBall(x,y,z,cid_mucous_membrane,4) end
-				                 )
-				    drawMultiline( {x=x, y=y, z=z}
-				                 , verts
-				                 , function (x,y,z) drawBall(x,y,z,cid_bile,3) end
-				                 )
-
-		
+				    drawMultiline( {x=x, y=y, z=z}, verts
+				                 , function (x,y,z) drawBall(x,y,z,cid_mucous_membrane,4) end)
+				    drawMultiline( {x=x, y=y, z=z}, verts
+				                 , function (x,y,z) drawBall(x,y,z,cid_bile,3) end)
 				end
+
+		        --tes
+		        if  math.random(0,50^3) == 0 then
+		            verts = vertexCloud({x=x-10,y=y-10,z=z-10},{x=x+10,y=y+10,z=z+10})
+		            drawRays({x=x, y=y+20, z=z}, verts, function (x,y,z) setXYZ(x,y,z,cid_nerve) end)
+		        end
+		        
 				--increment indices
 				nixyz = nixyz + 1
 				vi = vi + 1
