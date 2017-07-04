@@ -500,10 +500,10 @@ minetest.register_on_generated(function(minp, maxp, seed)
 				end
 
 		        --tes
-		        if  math.random(0,50^3) == 0 then
-		            verts = vertexCloud({x=x-10,y=y-10,z=z-10},{x=x+10,y=y+10,z=z+10})
-		            drawRays({x=x, y=y+20, z=z}, verts, function (x,y,z) setXYZ(x,y,z,cid_nerve) end)
-		        end
+		        --if  math.random(0,50^3) == 0 then
+		        --    verts = vertexCloud({x=x-10,y=y-10,z=z-10},{x=x+10,y=y+10,z=z+10})
+		        --    drawRays({x=x, y=y+20, z=z}, verts, function (x,y,z) setXYZ(x,y,z,cid_nerve) end)
+		        --end
 		        
 				--increment indices
 				nixyz = nixyz + 1
