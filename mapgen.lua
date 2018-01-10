@@ -410,8 +410,12 @@ minetest.register_on_generated(function(minp, maxp, seed)
 	local cid_bone = minetest.get_content_id("meatspace:bone")
 	local cid_bone_matrix = minetest.get_content_id("meatspace:bone_matrix")
 	local cid_enamel = minetest.get_content_id("meatspace:enamel")
+	
+
+	local cid_liquid = minetest.get_content_id("meatspace:liquid")	
 	local cid_urine = minetest.get_content_id("meatspace:urine")
 	local cid_bile = minetest.get_content_id("meatspace:bile")
+	
 	local cid_mucous_membrane = minetest.get_content_id("meatspace:mucous_membrane")
 	local cid_tooth_seed = minetest.get_content_id("meatspace:tooth_seed")	
 
@@ -500,10 +504,29 @@ minetest.register_on_generated(function(minp, maxp, seed)
 				end
 
 		        --tes
-		        --if  math.random(0,50^3) == 0 then
-		        --    verts = vertexCloud({x=x-10,y=y-10,z=z-10},{x=x+10,y=y+10,z=z+10})
-		        --    drawRays({x=x, y=y+20, z=z}, verts, function (x,y,z) setXYZ(x,y,z,cid_nerve) end)
-		        --end
+		        if  (math.random(0,10^6) == 0 
+		                and data[area:index(x,y- 30,z)] ~= cid_air  
+		                and data[area:index(x,y+10,z)] == cid_air) then
+		            eyeradius = math.random(10,20)
+
+		            
+		            muscleverts = vertexCloud({x=x-10,y=y-10-eyeradius,z=z-10}
+		                                     ,{x=x+10,y=y+10-eyeradius,z=z+10} 
+		                                     , math.random(4,8))
+		            drawRays( {x=x, y=y, z=z}, muscleverts
+		                    , function (x,y,z) drawBall(x,y,z,cid_meat,2) end)
+		            
+		            nerveverts = vertexCloud( {x=x-10,y=y-10-eyeradius,z=z-10}
+		                                    , {x=x+10,y=y+10-eyeradius,z=z+10}
+		                                    , math.random(1,4)	 )	           
+		            drawRays( {x=x, y=y-eyeradius, z=z}, nerveverts
+		                    , function (x,y,z) setXYZ(x,y,z,cid_nerve) end)
+		            
+
+
+		            drawBall(x,y,z,cid_bone, eyeradius)
+		            drawBall(x,y,z,cid_liquid, eyeradius-2)
+		        end
 		        
 				--increment indices
 				nixyz = nixyz + 1
