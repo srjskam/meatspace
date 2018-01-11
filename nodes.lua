@@ -103,7 +103,19 @@ minetest.register_node("meatspace:nerve", {
 	on_place = minetest.rotate_node
 })
 
--- oddly_breakable_by_hand=, crumbly=, cracky=, choppy=, fleshy=, snappy=, explody=,
+minetest.register_node("meatspace:cornea", {
+	description = "Cornea",
+	drawtype = "glasslike",
+	tiles ={"cornea.png"},
+	paramtype = "light",
+	is_ground_content = false,
+	sunlight_propagates = true,
+	alpha = 160,
+	groups = {snappy=2,cracky=3,oddly_breakable_by_hand=3}
+	--sounds = default.node_sound_glass_defaults(),
+})
+
+-- flora
 
 minetest.register_node("meatspace:filiform_papilla", {
 	description = "Filiform papilla",

@@ -1,4 +1,6 @@
 
+---------------------------------------------------------------  functions
+
 -- adapted from http://stackoverflow.com/questions/16505905/walk-a-line-between-two-points-in-a-3d-voxel-space-visiting-all-cells
 function drawLine(g0, g1, visitor)
 	
@@ -66,6 +68,76 @@ function drawLine(g0, g1, visitor)
 		end
 	end --while
 end --function
+
+
+function drawMultiline(origin, vertices, drawfunction)
+	from = origin
+    for i, dest in ipairs(vertices) do
+        drawLine(from,dest , drawfunction)	
+        from = dest
+    end
+end--drawMultiline
+
+function vertexCloud(minver, maxver, number)
+    n = number or 10
+	verts = {}
+	for i= 1, n do 
+	    table.insert(verts, {x=math.random(minver.x, maxver.x)
+	                        ,y=math.random(minver.y, maxver.y)
+	                        ,z=math.random(minver.z, maxver.z)
+	                        }	)
+	end
+	return verts
+end		--vertexCloud
+
+function drawRays(from, toverts, drawfunction)
+    for i,to in ipairs(toverts) do
+        drawLine(from, to, drawfunction)
+    end
+end --drawRays
+
+function drawBall( x, y, z, cid, radius, top, bottom)
+    top = top or 1.0
+    bottom = bottom or -1.0
+    local radiussquared = math.pow(radius, 2)
+	for xx = x-radius, x+radius do
+		for zz = z-radius, z+radius do
+			for yy = y+math.floor(radius*bottom), y+math.floor(radius*top)  do
+			    if ( math.pow(math.abs(x-xx), 2)
+			       + math.pow(math.abs(y-yy), 2)
+				   + math.pow(math.abs(z-zz), 2)) < radiussquared then
+			        setXYZ( xx, yy, zz, cid)
+			    end
+			end
+		end
+	end
+end --drawBall
+
+function createMultiline(position, minvertices, maxvertices, initspeed, maxspeed, maxdelta)
+    minvertices=minvertices or 4
+    maxvertices=maxvertices or 8
+    initspeed=initspeed or 4
+    maxspeed=maxspeed or 10
+    maxdelta=maxdelta or 2
+    vertices = {}
+    speedvec = { x=randomFloat(-initspeed,initspeed)
+               , y=randomFloat(-initspeed,initspeed)
+               , z=randomFloat(-initspeed,initspeed)}
+    
+    for i = 1, math.random(minvertices,maxvertices) do 
+        deltavec = { x=randomFloat(-maxdelta,maxdelta)
+                    , y=randomFloat(-maxdelta,maxdelta)
+                    , z=randomFloat(-maxdelta,maxdelta)}
+        position = vector.add(position, speedvec)
+        speedvec = vector.add(speedvec, deltavec)
+        speedvec = {x=math.min(maxspeed, math.max(-maxspeed, speedvec.x))
+                   ,y=math.min(maxspeed, math.max(-maxspeed, speedvec.y))
+                   ,z=math.min(maxspeed, math.max(-maxspeed, speedvec.z))
+                   }
+        table.insert(vertices, position)
+    end
+    return vertices
+end--createMultiline
 
 
 

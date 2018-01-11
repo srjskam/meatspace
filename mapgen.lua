@@ -318,75 +318,10 @@ function randomFloat(lower, greater)
     return lower + math.random()  * (greater - lower);
 end
 
----------------------------------------------------------------  functions
-
-function drawBall( x, y, z, cid, radius)
-    local radiussquared = math.pow(radius, 2)
-	for xx = x-radius, x+radius do
-		for zz = z-radius, z+radius do
-			for yy = y-radius, y+radius  do
-			    if ( math.pow(math.abs(x-xx), 2)
-			       + math.pow(math.abs(y-yy), 2)
-				   + math.pow(math.abs(z-zz), 2)) < radiussquared then
-			        setXYZ( xx, yy, zz, cid)
-			    end
-			end
-		end
-	end
-end --drawBall
 
 
-function createMultiline(position, minvertices, maxvertices, initspeed, maxspeed, maxdelta)
-    minvertices=minvertices or 4
-    maxvertices=maxvertices or 8
-    initspeed=initspeed or 4
-    maxspeed=maxspeed or 10
-    maxdelta=maxdelta or 2
-    vertices = {}
-    speedvec = { x=randomFloat(-initspeed,initspeed)
-               , y=randomFloat(-initspeed,initspeed)
-               , z=randomFloat(-initspeed,initspeed)}
-    
-    for i = 1, math.random(minvertices,maxvertices) do 
-        deltavec = { x=randomFloat(-maxdelta,maxdelta)
-                    , y=randomFloat(-maxdelta,maxdelta)
-                    , z=randomFloat(-maxdelta,maxdelta)}
-        position = vector.add(position, speedvec)
-        speedvec = vector.add(speedvec, deltavec)
-        speedvec = {x=math.min(maxspeed, math.max(-maxspeed, speedvec.x))
-                   ,y=math.min(maxspeed, math.max(-maxspeed, speedvec.y))
-                   ,z=math.min(maxspeed, math.max(-maxspeed, speedvec.z))
-                   }
-        table.insert(vertices, position)
-    end
-    return vertices
-end--createMultiline
 
-function drawMultiline(origin, vertices, drawfunction)
-	from = origin
-    for i, dest in ipairs(vertices) do
-        drawLine(from,dest , drawfunction)	
-        from = dest
-    end
-end--drawMultiline
 
-function vertexCloud(minver, maxver, number)
-    n = number or 10
-	verts = {}
-	for i= 1, n do 
-	    table.insert(verts, {x=math.random(minver.x, maxver.x)
-	                        ,y=math.random(minver.y, maxver.y)
-	                        ,z=math.random(minver.z, maxver.z)
-	                        }	)
-	end
-	return verts
-end		--vertexCloud
-
-function drawRays(from, toverts, drawfunction)
-    for i,to in ipairs(toverts) do
-        drawLine(from, to, drawfunction)
-    end
-end --drawRays
 	    
 minetest.register_on_generated(function(minp, maxp, seed)
 	local x1 = maxp.x
@@ -400,8 +335,8 @@ minetest.register_on_generated(function(minp, maxp, seed)
 	local area = VoxelArea:new{MinEdge=emin, MaxEdge=emax}
 	local data = vm:get_data()
 	
-	function setXYZ( x, y, z, cid)
-	    data[area:index(x,y,z)] = cid
+	function setXYZ( xxx, yyy, zzz, cid)
+	    data[area:index(xxx,yyy,zzz)] = cid
     end --setXYZ
 
 	local cid_air = minetest.get_content_id("air")	
@@ -409,7 +344,8 @@ minetest.register_on_generated(function(minp, maxp, seed)
 	local cid_nerve = minetest.get_content_id("meatspace:nerve")	
 	local cid_bone = minetest.get_content_id("meatspace:bone")
 	local cid_bone_matrix = minetest.get_content_id("meatspace:bone_matrix")
-	local cid_enamel = minetest.get_content_id("meatspace:enamel")
+	local cid_enamel = minetest.get_content_id("meatspace:enamel")	
+	local cid_cornea = minetest.get_content_id("meatspace:cornea")
 	
 
 	local cid_liquid = minetest.get_content_id("meatspace:liquid")	
@@ -503,8 +439,8 @@ minetest.register_on_generated(function(minp, maxp, seed)
 				                 , function (x,y,z) drawBall(x,y,z,cid_bile,3) end)
 				end
 
-		        --tes
-		        if  (math.random(0,10^6) == 0 
+		        --eyes
+		        if  (math.random(0,10^5) == 0 
 		                and data[area:index(x,y- 30,z)] ~= cid_air  
 		                and data[area:index(x,y+10,z)] == cid_air) then
 		            eyeradius = math.random(10,20)
@@ -522,10 +458,11 @@ minetest.register_on_generated(function(minp, maxp, seed)
 		            drawRays( {x=x, y=y-eyeradius, z=z}, nerveverts
 		                    , function (x,y,z) setXYZ(x,y,z,cid_nerve) end)
 		            
-
-
+		            corneasize = math.random(75,90)/100.0
 		            drawBall(x,y,z,cid_bone, eyeradius)
-		            drawBall(x,y,z,cid_liquid, eyeradius-2)
+                    drawBall(x,y,z,cid_nerve, eyeradius-1)
+		            drawBall(x,y,z,cid_liquid, eyeradius-2)		            
+		            drawBall(x,y,z,cid_cornea, eyeradius, 1.0, corneasize)
 		        end
 		        
 				--increment indices
